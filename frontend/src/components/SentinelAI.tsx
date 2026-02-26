@@ -3,7 +3,7 @@ import { useAegisStore } from '../store';
 import { Brain, Zap, MessageSquare, ShieldCheck, Activity } from 'lucide-react';
 
 export const SentinelAI: React.FC = () => {
-    const { drones, alerts, currentRisk, waterLevel } = useAegisStore();
+    const { alerts, currentRisk, waterLevel } = useAegisStore();
     const [briefing, setBriefing] = useState<string>("Analyzing coastal telemetry...");
     const [isThinking, setIsThinking] = useState(false);
 

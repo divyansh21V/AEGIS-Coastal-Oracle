@@ -524,7 +524,7 @@ aegis/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/DivyanshKalra/AEGIS.git
+git clone https://github.com/divyansh21V/AEGIS-Coastal-Oracle.git
 cd aegis
 ```
 

@@ -131,7 +131,7 @@ function MapLibreViewer({ config, status }: {
 }) {
     const mapContainer = useRef<HTMLDivElement>(null);
     const map = useRef<maplibregl.Map | null>(null);
-    const store = useAegisStore();
+    const { waterLevel } = useAegisStore();
 
     const latNum = parseFloat(config.lat);
     const lonNum = parseFloat(config.lon);
@@ -218,7 +218,7 @@ function MapLibreViewer({ config, status }: {
                 source: 'flood-plane',
                 paint: {
                     'fill-extrusion-color': '#06B6D4',
-                    'fill-extrusion-height': store.waterLevel * 25,
+                    'fill-extrusion-height': waterLevel * 25,
                     'fill-extrusion-base': 0,
                     'fill-extrusion-opacity': 0.45
                 }
@@ -265,7 +265,7 @@ function MapLibreViewer({ config, status }: {
                 map.current = null;
             }
         };
-    }, [config.droneId, store.waterLevel]);
+    }, [config.droneId, waterLevel]);
 
     useEffect(() => {
         if (map.current && map.current.isStyleLoaded()) {
@@ -333,7 +333,6 @@ const MOCK_MODELS = [
 
 export default function Photogrammetry() {
     const [selected, setSelected] = useState('MDL-001')
-    const store = useAegisStore()
 
     const config = REGION_CONFIGS[selected] || REGION_CONFIGS['MDL-001']
     const model = MOCK_MODELS.find(m => m.id === selected) || MOCK_MODELS[0]

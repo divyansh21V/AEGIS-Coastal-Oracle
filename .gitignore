@@ -54,6 +54,8 @@ Thumbs.db
 .env
 .env.local
 .env.production
+frontend/.env
+frontend/.env.local
 *.pem
 *.key
 
