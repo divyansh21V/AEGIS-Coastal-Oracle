@@ -1,0 +1,98 @@
+{
+    "system": "AEGIS v1.2",
+    "last_updated": "2026-02-25",
+    "roles": {
+        "CIVILIAN": {
+            "access_level": 1,
+            "features": [
+                "Public Forecast",
+                "Safety Zones",
+                "Alert Briefs"
+            ]
+        },
+        "RESPONDER": {
+            "access_level": 5,
+            "features": [
+                "Full Telemetry",
+                "Tactical Map",
+                "Fleet Deployment",
+                "Stakeholder Comms"
+            ]
+        },
+        "GOVERNMENT": {
+            "access_level": 10,
+            "features": [
+                "Neural Diagnostics",
+                "Biometric Override",
+                "Resource Allocation",
+                "Full Sensor Fusion"
+            ]
+        }
+    },
+    "zones": [
+        {
+            "id": "Z-DHARAVI",
+            "label": "Dharavi",
+            "type": "DENSE_URBAN",
+            "priority": "CRITICAL"
+        },
+        {
+            "id": "Z-KURLA-W",
+            "label": "Kurla West",
+            "type": "URBAN",
+            "priority": "SEVERE"
+        },
+        {
+            "id": "Z-MAHIM",
+            "label": "Mahim Bay",
+            "type": "COASTAL",
+            "priority": "MODERATE"
+        },
+        {
+            "id": "Z-BANDRA",
+            "label": "Bandra East",
+            "type": "URBAN",
+            "priority": "SEVERE"
+        },
+        {
+            "id": "Z-SION",
+            "label": "Sion Circle",
+            "type": "TRANSPORT_HUB",
+            "priority": "MODERATE"
+        }
+    ],
+    "fleet_specs": {
+        "HAWK_ALPHA": {
+            "type": "SCOUT",
+            "sensor_package": "SAR + THERMAL",
+            "battery_life_min": 45
+        },
+        "HAWK_BRAVO": {
+            "type": "SCOUT",
+            "sensor_package": "RGB + LIDAR",
+            "battery_life_min": 45
+        },
+        "SENTINEL_X1": {
+            "type": "HEAVY_LIFT",
+            "sensor_package": "MULTI-SPECTRAL",
+            "battery_life_min": 30
+        }
+    },
+    "sensor_fusion_sources": [
+        {
+            "id": "SAR-01",
+            "provider": "Copernicus",
+            "interval_min": 15
+        },
+        {
+            "id": "IOT-MUMBAI",
+            "provider": "Municipal Sensors",
+            "interval_min": 1
+        },
+        {
+            "id": "FLEET-DATA",
+            "provider": "AEGIS Internal",
+            "interval_min": 0.1
+        }
+    ]
+}
