@@ -1,6 +1,6 @@
 # ═══════════════════════════════════════════════════════════════
 # AEGIS — Python Dependencies (Root)
-# Unified requirements for backend, poseidon, training, scripts
+# Unified requirements for backend, aegis_sim, training, scripts
 # ═══════════════════════════════════════════════════════════════
 
 # ── Backend (FastAPI + WebSocket Server) ──

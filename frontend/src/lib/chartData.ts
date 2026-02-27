@@ -18,52 +18,45 @@ function tidalNoise(hour: number, amplitude: number = 0.08): number {
     return m2 + s2
 }
 
-// ─── Cubic Hermite interpolation between known data points ───
-function hermiteInterpolate(t: number, p0: number, p1: number, m0: number, m1: number): number {
-    const t2 = t * t
-    const t3 = t2 * t
-    return (2 * t3 - 3 * t2 + 1) * p0 +
-        (t3 - 2 * t2 + t) * m0 +
-        (-2 * t3 + 3 * t2) * p1 +
-        (t3 - t2) * m1
-}
-
 // ─── Generate per-zone 72h projection from real data ───
 export function generateZoneProjection(zone: ZoneData): number[] {
-    const knots = [
-        { h: 0, v: zone.floodLevel },
-        { h: 24, v: zone.predicted24h },
-        { h: 48, v: zone.predicted48h },
-        { h: 72, v: zone.predicted72h },
-    ]
+    const points: number[] = [];
+    const peakRunup = Math.max(zone.floodLevel, zone.predicted24h, zone.predicted48h, zone.predicted72h);
 
-    const points: number[] = []
+    // Simulate a storm surge peaking within the 72h window
+    // We deterministically spread the peak hour based on the zone name so different zones peak at different times
+    const nameHash = zone.name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    const peakHour = 30 + (nameHash % 24); // Storm peaks between hour 30 and 54
+    const stormDurationHours = 36 + (nameHash % 12); // How wide the surge is (hours)
+
+    const baseLevel = Math.max(0.2, zone.floodLevel * 0.4);
 
     for (let h = 0; h <= 72; h++) {
-        // Find which segment we're in
-        let segIdx = 0
-        if (h >= 48) segIdx = 2
-        else if (h >= 24) segIdx = 1
+        // Tides: mixed semi-diurnal (typical for Indian Ocean / Bay of Bengal)
+        const principalLunar = Math.sin((2 * Math.PI * h) / 12.42);
+        const principalSolar = Math.sin((2 * Math.PI * h) / 12.0) * 0.46;
+        const diurnal = Math.sin((2 * Math.PI * h) / 24.8) * 0.2; // diurnal inequality
 
-        const p0 = knots[segIdx].v
-        const p1 = knots[segIdx + 1].v
-        const segStart = knots[segIdx].h
-        const segEnd = knots[segIdx + 1].h
-        const t = (h - segStart) / (segEnd - segStart)
+        const tide = (principalLunar + principalSolar + diurnal) * 0.35; // ± ~0.6m tide swing
 
-        // Tangent estimates (finite difference)
-        const m0 = segIdx > 0
-            ? (knots[segIdx + 1].v - knots[segIdx - 1].v) / 2
-            : (knots[1].v - knots[0].v)
-        const m1 = segIdx < 2
-            ? (knots[segIdx + 2].v - knots[segIdx].v) / 2
-            : (knots[3].v - knots[2].v)
+        // Storm Surge component (Gaussian curve)
+        const dist = Math.abs(h - peakHour);
+        const zScore = dist / (stormDurationHours / 2.5);
+        const surgeMultiplier = Math.exp(-0.5 * zScore * zScore);
 
-        const base = hermiteInterpolate(t, p0, p1, m0, m1)
-        const noise = tidalNoise(h, 0.06 * Math.max(1, zone.floodLevel * 0.3))
-        points.push(Math.max(0, +(base + noise).toFixed(2)))
+        // The peak surge should reach the predicted max runup.
+        const tideAtPeak = (Math.sin((2 * Math.PI * peakHour) / 12.42) + Math.sin((2 * Math.PI * peakHour) / 12.0) * 0.46 + Math.sin((2 * Math.PI * peakHour) / 24.8) * 0.2) * 0.35;
+        const requiredSurge = Math.max(0, peakRunup - baseLevel - tideAtPeak);
+
+        const currentSurge = surgeMultiplier * requiredSurge;
+        let val = baseLevel + tide + currentSurge;
+
+        // Add high-frequency noise (wind waves/chop) which intensifies with the surge
+        const noise = (Math.random() - 0.5) * 0.12 * (1 + surgeMultiplier * 2);
+
+        points.push(Math.max(0, +(val + noise).toFixed(2)));
     }
-    return points
+    return points;
 }
 
 // ─── Dashboard: 72h Forecast data (composed from the top 3 risk zones) ───

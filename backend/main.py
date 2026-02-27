@@ -13,8 +13,8 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from poseidon.engine import calculate_stockdon_runup, calculate_flood_risk
-from poseidon.inference import InferenceEngine
+from aegis_sim.engine import calculate_stockdon_runup, calculate_flood_risk
+from aegis_sim.inference import InferenceEngine
 
 app = FastAPI(title="AEGIS Cortex", version="5.3",
               description="AI-Powered Predictive Flood Monitoring — Visakhapatnam, India")

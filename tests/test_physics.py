@@ -3,12 +3,12 @@ import math
 import sys
 import os
 
-# Add parent dir to path to import poseidon
+# Add parent dir to path to import aegis_sim
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from poseidon.engine import calculate_stockdon_runup
+from aegis_sim.engine import calculate_stockdon_runup
 
-class TestPoseidonPhysics(unittest.TestCase):
+class TestAegisPhysics(unittest.TestCase):
     def test_stockdon_runup(self):
         # Known inputs
         H0 = 4.0

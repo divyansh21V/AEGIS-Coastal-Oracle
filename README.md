@@ -257,7 +257,7 @@ graph TB
 | **Backend** | FastAPI + Uvicorn | WebSocket server & ML inference API |
 | **ML Inference** | ONNX Runtime + DirectML | AMD Ryzen AI NPU acceleration |
 | **Object Detection** | YOLOv8 (Ultralytics) | Flood scene segmentation |
-| **Poseidon Dashboard** | Streamlit + PyDeck | Standalone 3D drone mission viewer |
+| **Aegis Dashboard** | Streamlit + PyDeck | Standalone 3D drone mission viewer |
 | **Data Pipeline** | Python (NumPy, Pandas, SciPy) | Telemetry generation & analysis |
 
 ---
@@ -481,7 +481,7 @@ aegis/
 ├── backend/                     # FastAPI WebSocket server
 │   └── main.py                  # Telemetry loop, inference, sectors
 │
-├── poseidon/                    # Streamlit drone mission dashboard
+├── aegis_sim/                   # Streamlit drone mission dashboard
 │   ├── app.py                   # Mission control UI
 │   ├── engine.py                # Stockdon 2006 physics engine
 │   ├── inference.py             # ONNX Runtime / DirectML
@@ -556,9 +556,9 @@ npm run preview      # Serve production build
 python -m uvicorn backend.main:app --reload --port 8000
 ```
 
-### 5. Poseidon Dashboard (Optional)
+### 5. Aegis Simulator Dashboard (Optional)
 ```bash
-streamlit run poseidon/app.py
+streamlit run aegis_sim/app.py
 ```
 
 ### 6. Data Pipeline (Optional — regenerate datasets)
@@ -571,7 +571,7 @@ python scripts/massive_data_pipeline.py
 |---------|-----|
 | Frontend | http://localhost:5173 |
 | Backend API | http://localhost:8000/api/system |
-| Poseidon | http://localhost:8501 |
+| Aegis Simulator | http://localhost:8501 |
 
 ---
 

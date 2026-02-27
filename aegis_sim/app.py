@@ -5,14 +5,14 @@ import numpy as np
 import time
 from datetime import datetime
 
-# Import Poseidon modules
-from poseidon.engine import calculate_stockdon_runup, calculate_flood_risk
-from poseidon.inference import InferenceEngine
-from poseidon.drone import DroneSimulator
+# Import Aegis modules
+from aegis_sim.engine import calculate_stockdon_runup, calculate_flood_risk
+from aegis_sim.inference import InferenceEngine
+from aegis_sim.drone import DroneSimulator
 
 # Page Config
 st.set_page_config(
-    page_title="Poseidon: Coastal Oracle",
+    page_title="Aegis: Coastal Oracle",
     page_icon="🌊",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -43,7 +43,7 @@ col1, col2 = st.columns([1, 4])
 with col1:
     st.image("https://img.icons8.com/color/96/000000/tsunami.png", width=80) 
 with col2:
-    st.title("PROJECT POSEIDON")
+    st.title("PROJECT AEGIS")
     st.markdown("**The Offline-First Drone Prediction Engine** | *AMD Ryzen AI Powered*")
 
 # --- Sidebar Controls (Commander's View) ---

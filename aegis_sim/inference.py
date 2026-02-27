@@ -9,7 +9,7 @@ except ImportError:
 
 # Configure Logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("Poseidon.Inference")
+logger = logging.getLogger("Aegis.Inference")
 
 class InferenceEngine:
     def __init__(self, model_path: str = None):

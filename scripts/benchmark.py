@@ -4,8 +4,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import time
 import numpy as np
-from poseidon.engine import calculate_stockdon_runup
-from poseidon.inference import InferenceEngine
+from aegis_sim.engine import calculate_stockdon_runup
+from aegis_sim.inference import InferenceEngine
 
 def benchmark_engine(n=100000):
     print(f"🌊 Starting Stress Test: {n} Wave Calculations...")
