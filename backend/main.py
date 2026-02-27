@@ -1,7 +1,7 @@
 """
 AEGIS Cortex - FastAPI Backend
 AI-Powered Predictive Flood Monitoring System
-Target: Visakhapatnam (Vizag), Andhra Pradesh, India
+Target: Mumbai, Maharashtra, India
 """
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
@@ -34,131 +34,131 @@ PREDICTION_MODE = "hybrid"
 
 
 CITY = {
-    "name": "Visakhapatnam",
-    "state": "Andhra Pradesh, India",
-    "lat": 17.6868,
-    "lon": 83.2185,
+    "name": "Mumbai",
+    "state": "Maharashtra, India",
+    "lat": 19.0760,
+    "lon": 72.8777,
     "timezone": "IST",
-    "beach_slope": 0.045,
+    "beach_slope": 0.035,
 }
 
 SECTORS = {
-    "Sector 1 - RK Beach": {
-        "wall_height": 2.5, "population": 12000,
-        "lat": 17.7145, "lon": 83.3255,
-        "structural_integrity": 78, "grid_integrity": 85,
+    "Sector 1 - Colaba": {
+        "wall_height": 2.8, "population": 18000,
+        "lat": 18.9067, "lon": 72.8147,
+        "structural_integrity": 72, "grid_integrity": 78,
     },
-    "Sector 2 - Rushikonda": {
-        "wall_height": 3.0, "population": 5000,
-        "lat": 17.7583, "lon": 83.3783,
-        "structural_integrity": 91, "grid_integrity": 92,
+    "Sector 2 - Worli Seaface": {
+        "wall_height": 3.2, "population": 22000,
+        "lat": 19.0176, "lon": 72.8150,
+        "structural_integrity": 85, "grid_integrity": 88,
     },
-    "Sector 3 - Fishing Harbour": {
-        "wall_height": 1.8, "population": 25000,
-        "lat": 17.6920, "lon": 83.2938,
-        "structural_integrity": 62, "grid_integrity": 71,
+    "Sector 3 - Dharavi": {
+        "wall_height": 1.5, "population": 65000,
+        "lat": 19.0438, "lon": 72.8534,
+        "structural_integrity": 45, "grid_integrity": 52,
     },
-    "Sector 4 - Port Area": {
-        "wall_height": 4.5, "population": 8000,
-        "lat": 17.6808, "lon": 83.2790,
-        "structural_integrity": 88, "grid_integrity": 90,
+    "Sector 4 - JNPT / Nhava Sheva": {
+        "wall_height": 4.8, "population": 12000,
+        "lat": 18.9500, "lon": 72.9500,
+        "structural_integrity": 91, "grid_integrity": 93,
     },
-    "Sector 5 - Lawson's Bay": {
-        "wall_height": 2.2, "population": 6500,
-        "lat": 17.7285, "lon": 83.3408,
-        "structural_integrity": 74, "grid_integrity": 80,
+    "Sector 5 - Juhu Beach": {
+        "wall_height": 2.0, "population": 15000,
+        "lat": 19.0988, "lon": 72.8267,
+        "structural_integrity": 68, "grid_integrity": 74,
     },
 }
 
 ROADS = {
-    "Beach Road": 1.6,
-    "NH-16 (Coastal Hwy)": 3.5,
-    "Simhachalam Road": 5.0,
-    "Old Gajuwaka Road": 2.8,
-    "Harbour Approach Rd": 1.2,
-    "RK Beach Promenade": 1.0,
+    "Marine Drive": 1.8,
+    "Western Express Hwy": 4.5,
+    "SV Road (Bandra)": 3.2,
+    "LBS Marg (Kurla)": 2.5,
+    "Harbour Link Road": 1.4,
+    "Carter Road (Bandra)": 1.2,
 }
 
 SHELTERS = [
     {
-        "id": "sh-1", "name": "GVMC Community Hall", "lat": 17.7120, "lon": 83.3180,
-        "capacity": 500, "current_occupancy": 0, "status": "OPEN",
-        "distance_km": 1.2, "supplies": ["Water", "Medical", "Wi-Fi", "Generator"],
+        "id": "sh-1", "name": "BMC Community Hall - Dadar", "lat": 19.0178, "lon": 72.8478,
+        "capacity": 800, "current_occupancy": 0, "status": "OPEN",
+        "distance_km": 1.5, "supplies": ["Water", "Medical", "Wi-Fi", "Generator"],
         "safe_routes_available": True, "accessibility": "High Rating",
     },
     {
-        "id": "sh-2", "name": "Andhra University Campus", "lat": 17.7311, "lon": 83.3186,
-        "capacity": 2000, "current_occupancy": 0, "status": "OPEN",
-        "distance_km": 2.8, "supplies": ["Water", "Medical", "Wi-Fi", "Food"],
+        "id": "sh-2", "name": "Mumbai University Campus", "lat": 18.9316, "lon": 72.8316,
+        "capacity": 2500, "current_occupancy": 0, "status": "OPEN",
+        "distance_km": 3.2, "supplies": ["Water", "Medical", "Wi-Fi", "Food"],
         "safe_routes_available": True, "accessibility": "High Rating",
     },
     {
-        "id": "sh-3", "name": "Central High Gym", "lat": 17.7050, "lon": 83.3000,
-        "capacity": 350, "current_occupancy": 84, "status": "OPEN",
-        "distance_km": 1.5, "supplies": ["Water", "Medical"],
-        "safe_routes_available": True, "accessibility": "Moderate",
-    },
-    {
-        "id": "sh-4", "name": "King George Hospital", "lat": 17.7147, "lon": 83.3017,
-        "capacity": 1500, "current_occupancy": 320, "status": "OPEN",
-        "distance_km": 3.1, "supplies": ["Water", "Medical", "Generator", "Food"],
+        "id": "sh-3", "name": "NSCI Dome - Worli", "lat": 19.0200, "lon": 72.8190,
+        "capacity": 3000, "current_occupancy": 120, "status": "OPEN",
+        "distance_km": 2.1, "supplies": ["Water", "Medical", "Generator"],
         "safe_routes_available": True, "accessibility": "High Rating",
     },
     {
-        "id": "sh-5", "name": "Port Trust School", "lat": 17.6850, "lon": 83.2830,
-        "capacity": 600, "current_occupancy": 0, "status": "STANDBY",
-        "distance_km": 4.2, "supplies": ["Water", "Food"],
-        "safe_routes_available": False, "accessibility": "Limited",
+        "id": "sh-4", "name": "KEM Hospital", "lat": 19.0000, "lon": 72.8400,
+        "capacity": 1500, "current_occupancy": 450, "status": "OPEN",
+        "distance_km": 2.8, "supplies": ["Water", "Medical", "Generator", "Food"],
+        "safe_routes_available": True, "accessibility": "High Rating",
+    },
+    {
+        "id": "sh-5", "name": "Andheri Sports Complex", "lat": 19.1197, "lon": 72.8464,
+        "capacity": 1200, "current_occupancy": 0, "status": "STANDBY",
+        "distance_km": 5.0, "supplies": ["Water", "Food"],
+        "safe_routes_available": False, "accessibility": "Moderate",
     },
 ]
 
 INFRASTRUCTURE = [
-    {"name": "North River Bridge", "lat": 17.7200, "lon": 83.3150,
-     "type": "bridge", "score": 92, "risk": "Critical Failure Risk"},
-    {"name": "Downtown Substation", "lat": 17.7100, "lon": 83.3050,
-     "type": "power", "score": 78, "risk": "Moderate Risk"},
-    {"name": "Eastside Shelter", "lat": 17.7050, "lon": 83.3200,
-     "type": "shelter", "score": 45, "risk": "Stable Structure"},
-    {"name": "HPCL Refinery", "lat": 17.6560, "lon": 83.2420,
+    {"name": "Bandra-Worli Sea Link", "lat": 19.0380, "lon": 72.8160,
+     "type": "bridge", "score": 94, "risk": "Critical Failure Risk"},
+    {"name": "Tata Power Trombay", "lat": 19.0050, "lon": 72.9100,
+     "type": "power", "score": 82, "risk": "Moderate Risk"},
+    {"name": "NDRF Station Andheri", "lat": 19.1136, "lon": 72.8697,
+     "type": "shelter", "score": 55, "risk": "Stable Structure"},
+    {"name": "BPCL Mahul Refinery", "lat": 19.0200, "lon": 72.9200,
      "type": "industrial", "score": 88, "risk": "Low Risk"},
-    {"name": "Vizag Port", "lat": 17.6808, "lon": 83.2790,
-     "type": "port", "score": 65, "risk": "Moderate Risk"},
+    {"name": "Mumbai Port Trust", "lat": 18.9350, "lon": 72.8450,
+     "type": "port", "score": 70, "risk": "Moderate Risk"},
 ]
 
 DRONES = [
     {"id": "drone-alpha", "name": "Alpha", "status": "ACTIVE", "battery": 78,
-     "altitude_m": 120, "speed_ms": 4.5, "lat": 17.7145, "lon": 83.3255,
+     "altitude_m": 120, "speed_ms": 4.5, "lat": 19.0438, "lon": 72.8534,
      "signal_dbm": -42, "data_rate": "12kb/s"},
     {"id": "drone-bravo", "name": "Bravo", "status": "ACTIVE", "battery": 65,
-     "altitude_m": 85, "speed_ms": 3.2, "lat": 17.6920, "lon": 83.2938,
+     "altitude_m": 85, "speed_ms": 3.2, "lat": 19.0176, "lon": 72.8150,
      "signal_dbm": -55, "data_rate": "8kb/s"},
     {"id": "drone-charlie", "name": "Charlie", "status": "STANDBY", "battery": 92,
-     "altitude_m": 0, "speed_ms": 0, "lat": 17.7311, "lon": 83.3186,
+     "altitude_m": 0, "speed_ms": 0, "lat": 18.9316, "lon": 72.8316,
      "signal_dbm": -30, "data_rate": "0kb/s"},
     {"id": "drone-delta", "name": "Delta", "status": "RETURNING", "battery": 23,
-     "altitude_m": 45, "speed_ms": 6.1, "lat": 17.7583, "lon": 83.3783,
+     "altitude_m": 45, "speed_ms": 6.1, "lat": 19.0988, "lon": 72.8267,
      "signal_dbm": -68, "data_rate": "4kb/s"},
 ]
 
 SHIPS = [
-    {"id": "mv-101", "name": "MV Bengal Tiger", "type": "cargo", "status": "In Transit", "speed_knots": 12.5, "lat": 17.6500, "lon": 83.3500, "heading": 310},
-    {"id": "mv-102", "name": "INS Jalashwa", "type": "military", "status": "Patrol", "speed_knots": 18.0, "lat": 17.6200, "lon": 83.4000, "heading": 290},
-    {"id": "fv-201", "name": "Krishna 8", "type": "fishing", "status": "Fishing", "speed_knots": 3.2, "lat": 17.7000, "lon": 83.3600, "heading": 120},
-    {"id": "fv-202", "name": "Ganga Star", "type": "fishing", "status": "Fishing", "speed_knots": 2.8, "lat": 17.7100, "lon": 83.3700, "heading": 140},
-    {"id": "tnk-301", "name": "Global Energy", "type": "tanker", "status": "Anchored", "speed_knots": 0.0, "lat": 17.6600, "lon": 83.3200, "heading": 0},
+    {"id": "mv-101", "name": "MV Mumbai Maersk", "type": "cargo", "status": "In Transit", "speed_knots": 12.5, "lat": 18.8800, "lon": 72.9200, "heading": 310},
+    {"id": "mv-102", "name": "INS Teg", "type": "military", "status": "Patrol", "speed_knots": 18.0, "lat": 18.9200, "lon": 72.7500, "heading": 290},
+    {"id": "fv-201", "name": "Macchimar 7", "type": "fishing", "status": "Fishing", "speed_knots": 3.2, "lat": 19.0900, "lon": 72.8100, "heading": 120},
+    {"id": "fv-202", "name": "Versova Star", "type": "fishing", "status": "Fishing", "speed_knots": 2.8, "lat": 19.1300, "lon": 72.8000, "heading": 140},
+    {"id": "tnk-301", "name": "Reliance Tanker", "type": "tanker", "status": "Anchored", "speed_knots": 0.0, "lat": 18.9500, "lon": 72.9600, "heading": 0},
 ]
 
 PORTS = [
-    {"id": "port-1", "name": "Vizag Container Terminal", "lat": 17.6900, "lon": 83.2900, "status": "Active", "capacity": 85},
-    {"id": "port-2", "name": "Fishing Harbour Jetties", "lat": 17.6950, "lon": 83.2980, "status": "Congested", "capacity": 98},
-    {"id": "port-3", "name": "Naval Dockyard", "lat": 17.6850, "lon": 83.2750, "status": "Restricted", "capacity": 60},
+    {"id": "port-1", "name": "Nhava Sheva (JNPT)", "lat": 18.9500, "lon": 72.9500, "status": "Active", "capacity": 90},
+    {"id": "port-2", "name": "Sassoon Docks", "lat": 18.9100, "lon": 72.8350, "status": "Congested", "capacity": 95},
+    {"id": "port-3", "name": "Mumbai Port Trust Docks", "lat": 18.9350, "lon": 72.8450, "status": "Active", "capacity": 65},
 ]
 
 POPULATION_HOTSPOTS = [
-    {"lat": 17.7145, "lon": 83.3255, "density": "High", "count": 12000, "label": "RK Beach Tourist Zone"},
-    {"lat": 17.7285, "lon": 83.3408, "density": "Medium", "count": 6500, "label": "Lawson's Bay Residential"},
-    {"lat": 17.6920, "lon": 83.2938, "density": "Very High", "count": 25000, "label": "Old Town / Harbour"},
-    {"lat": 17.7583, "lon": 83.3783, "density": "Low", "count": 5000, "label": "Rushikonda IT Park"},
+    {"lat": 19.0438, "lon": 72.8534, "density": "Very High", "count": 65000, "label": "Dharavi"},
+    {"lat": 19.0540, "lon": 72.8400, "density": "High", "count": 35000, "label": "Kurla West"},
+    {"lat": 19.0176, "lon": 72.8150, "density": "High", "count": 22000, "label": "Worli Koliwada"},
+    {"lat": 19.0988, "lon": 72.8267, "density": "Medium", "count": 15000, "label": "Juhu / Versova"},
 ]
 
 
