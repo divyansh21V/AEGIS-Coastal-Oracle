@@ -20,7 +20,7 @@ from aegis_sim.inference import InferenceEngine
 from aegis_sim.recorder import get_recorder
 
 app = FastAPI(title="AEGIS Cortex", version="1.0",
-              description="AI-Powered Predictive Flood Monitoring - Visakhapatnam, India")
+              description="AI-Powered Predictive Flood Monitoring - Mumbai, India")
 
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_credentials=True,

@@ -24,16 +24,16 @@ NUM_CYCLONE_EVENTS = 18
 CYCLONE_DURATION_HRS = (48, 120)
 
 BUOY_STATIONS = [
-    {"id": "BUOY-VZG-01", "name": "Vizag Offshore",    "lat": 17.72, "lon": 83.40, "region": "Andhra Coast"},
-    {"id": "BUOY-CHN-01", "name": "Chennai Buoy",      "lat": 13.10, "lon": 80.35, "region": "Coromandel Coast"},
-    {"id": "BUOY-MUM-01", "name": "Mumbai High",       "lat": 19.40, "lon": 72.20, "region": "Konkan Coast"},
-    {"id": "BUOY-GOA-01", "name": "Goa Offshore",      "lat": 15.30, "lon": 73.80, "region": "Canara Coast"},
-    {"id": "BUOY-KOC-01", "name": "Kochi Buoy",        "lat":  9.97, "lon": 76.25, "region": "Malabar Coast"},
-    {"id": "BUOY-PUR-01", "name": "Puri Nearshore",     "lat": 19.80, "lon": 85.90, "region": "Utkal Coast"},
-    {"id": "BUOY-DIG-01", "name": "Digha Bengal",       "lat": 21.65, "lon": 87.55, "region": "Bengal Coast"},
+    {"id": "BUOY-MUM-01", "name": "Mumbai Offshore",    "lat": 19.08, "lon": 72.70, "region": "Konkan Coast"},
+    {"id": "BUOY-MUM-02", "name": "Juhu Nearshore",     "lat": 19.10, "lon": 72.80, "region": "Konkan Coast"},
+    {"id": "BUOY-MUM-03", "name": "Nhava Sheva",        "lat": 18.95, "lon": 72.95, "region": "Konkan Coast"},
+    {"id": "BUOY-GOA-01", "name": "Goa Offshore",       "lat": 15.30, "lon": 73.80, "region": "Canara Coast"},
+    {"id": "BUOY-RNG-01", "name": "Ratnagiri Buoy",     "lat": 16.99, "lon": 73.30, "region": "Konkan Coast"},
+    {"id": "BUOY-ALB-01", "name": "Alibaug Coastal",    "lat": 18.64, "lon": 72.87, "region": "Konkan Coast"},
+    {"id": "BUOY-THN-01", "name": "Thane Creek",        "lat": 19.18, "lon": 72.97, "region": "Konkan Coast"},
     {"id": "BUOY-GUJ-01", "name": "Porbandar Offshore", "lat": 21.60, "lon": 69.60, "region": "Gujarat Coast"},
-    {"id": "BUOY-TUT-01", "name": "Tuticorin Buoy",     "lat":  8.80, "lon": 78.20, "region": "Coromandel Coast"},
-    {"id": "BUOY-DVK-01", "name": "Devka Beach",        "lat": 20.40, "lon": 72.80, "region": "Gujarat Coast"},
+    {"id": "BUOY-KOC-01", "name": "Kochi Buoy",         "lat":  9.97, "lon": 76.25, "region": "Malabar Coast"},
+    {"id": "BUOY-DVK-01", "name": "Daman Buoy",         "lat": 20.40, "lon": 72.80, "region": "Gujarat Coast"},
 ]
 
 COASTAL_REGIONS = [
@@ -373,9 +373,9 @@ def generate_cyclone_catalog():
             "SABARI", "GIRI", "UDAY", "SHANTI", "ANKUR", "PRITHVI", "VEERA", "SINDHU"
         ]
         regions_lf = [
-            (17.72, 83.30, "Visakhapatnam AP"), (13.08, 80.28, "Chennai TN"),
-            (21.65, 88.18, "Sundarbans WB"), (19.30, 84.95, "Puri Odisha"),
-            (23.10, 68.45, "Jakhau Gujarat"), (12.18, 80.12, "Mahabalipuram TN"),
+            (19.08, 72.88, "Mumbai MH"), (18.95, 72.95, "Nhava Sheva MH"),
+            (16.99, 73.30, "Ratnagiri MH"), (15.30, 73.80, "Goa"),
+            (23.10, 68.45, "Jakhau Gujarat"), (18.64, 72.87, "Alibaug MH"),
         ]
         for i in range(30):
             year = random.randint(1970, 2024)
