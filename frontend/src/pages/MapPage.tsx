@@ -239,16 +239,21 @@ const LAYER_DEFS = [
 ]
 
 export default function MapPage() {
-    const { zones, drones, landmarks, role, evacuationZones, activePaths, roadNetwork } = useAegisStore()
+    const { zones, drones, landmarks, role, evacuationZones, activePaths, roadNetwork, theme } = useAegisStore()
     const [activeLayers, setActiveLayers] = useState<Set<string>>(
         new Set(['seaTides', 'floodExtent', 'riskZones', 'drones', 'stations', 'shelters', 'evacZones', 'activePaths'])
     )
     const [navPath, setNavPath] = useState<[number, number][]>([])
     const [navStart, setNavStart] = useState<string>('N1')
     const [navEnd, setNavEnd] = useState<string>('N5')
-    const [viewMode, setViewMode] = useState<ViewMode>('satellite')
+    const [viewMode, setViewMode] = useState<ViewMode>(theme === 'light' ? 'street' : 'satellite')
     const [selectedZone, setSelectedZone] = useState<string | null>(null)
     const selected = zones.find(z => z.name === selectedZone)
+
+    useEffect(() => {
+        // Automatically sync Map tile layer with App theme toggles for perfect UI consistency
+        setViewMode(theme === 'light' ? 'street' : 'satellite')
+    }, [theme])
 
     const toggleLayer = (id: string) => {
         const next = new Set(activeLayers)
@@ -445,7 +450,9 @@ export default function MapPage() {
             {/* ── Left Panel: Layers + Legend ── */}
             <div className="glass-panel" style={{
                 position: 'absolute', top: 16, left: 16, zIndex: 1000,
-                width: 240, maxHeight: 'calc(100% - 32px)', overflowY: 'auto',
+                width: 260, maxHeight: 'calc(100% - 32px)', overflowY: 'auto',
+                backdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.05)',
+                boxShadow: 'var(--shadow-xl)'
             }}>
                 {/* Flood Risk Legend */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
@@ -467,20 +474,37 @@ export default function MapPage() {
                 <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6 }}>
                     LAYERS
                 </div>
-                {LAYER_DEFS.map(layer => (
-                    <button key={layer.id} onClick={() => toggleLayer(layer.id)} style={{
-                        display: 'flex', alignItems: 'center', gap: 6,
-                        width: '100%', padding: '4px 0',
-                        background: 'none', border: 'none', cursor: 'pointer',
-                        color: activeLayers.has(layer.id) ? 'var(--text-primary)' : 'var(--text-muted)',
-                        fontSize: 11, textAlign: 'left', fontFamily: 'var(--font-body)',
-                        transition: 'var(--transition-fast)', opacity: activeLayers.has(layer.id) ? 1 : 0.5,
-                    }}>
-                        {activeLayers.has(layer.id) ? <Eye size={10} /> : <EyeOff size={10} />}
-                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: layer.color, flexShrink: 0 }} />
-                        {layer.label}
-                    </button>
-                ))}
+                {LAYER_DEFS.map(layer => {
+                    // Extract precise icon SVG if this matches a landmark
+                    const lmType = layer.id.replace(/s$/, '')
+                    const isLandmark = Object.keys(LANDMARK_STYLES).includes(lmType)
+
+                    return (
+                        <button key={layer.id} onClick={() => toggleLayer(layer.id)} style={{
+                            display: 'flex', alignItems: 'center', gap: 10,
+                            width: '100%', padding: '6px 8px', borderRadius: 8,
+                            background: activeLayers.has(layer.id) ? 'var(--bg-elevated)' : 'transparent',
+                            border: `1px solid ${activeLayers.has(layer.id) ? 'var(--border-strong)' : 'transparent'}`,
+                            cursor: 'pointer',
+                            color: activeLayers.has(layer.id) ? 'var(--text-primary)' : 'var(--text-muted)',
+                            fontSize: 11, textAlign: 'left', fontFamily: 'var(--font-body)',
+                            transition: 'var(--transition-fast)', opacity: activeLayers.has(layer.id) ? 1 : 0.6,
+                        }}>
+                            {activeLayers.has(layer.id) ? <Eye size={12} color="var(--cyan-500)" /> : <EyeOff size={12} />}
+
+                            {/* Precise Mirror Map Marker Icon */}
+                            <div style={{ width: 14, height: 14, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                {isLandmark ? (
+                                    <div dangerouslySetInnerHTML={{ __html: createShapeIcon(layer.color, LANDMARK_STYLES[lmType].type).options.html || '' }} style={{ transform: 'scale(1.2)' }} />
+                                ) : (
+                                    <div style={{ width: 8, height: 8, borderRadius: 2, background: layer.color, border: `1px solid ${layer.color}`, opacity: 0.9 }} />
+                                )}
+                            </div>
+
+                            <span style={{ fontWeight: activeLayers.has(layer.id) ? 600 : 400 }}>{layer.label}</span>
+                        </button>
+                    )
+                })}
 
                 <div style={{ height: 1, background: 'var(--border-subtle)', margin: '8px 0' }} />
 
@@ -580,6 +604,24 @@ export default function MapPage() {
                 .custom-map-icon {
                     background: transparent;
                     border: none;
+                    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+                }
+                
+                /* Perfect Theme Integration for Leaflet Popups */
+                .leaflet-popup-content-wrapper {
+                    background: var(--bg-surface);
+                    color: var(--text-primary);
+                    border: 1px solid var(--border-strong);
+                    box-shadow: var(--shadow-xl);
+                    border-radius: var(--radius-lg);
+                }
+                .leaflet-popup-tip {
+                    background: var(--bg-surface);
+                    border-top: 1px solid var(--border-strong);
+                    border-left: 1px solid var(--border-strong);
+                }
+                .leaflet-popup-content {
+                    margin: 8px 12px;
                 }
             `}</style>
         </div>
