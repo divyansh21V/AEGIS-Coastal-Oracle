@@ -244,9 +244,9 @@ export const useAegisStore = create<AegisStore>((set, get) => ({
     })),
 
     roadNetwork: {
-        nodes: [{ id: 'N1', lat: 18.940, lon: 72.836 }, { id: 'N2', lat: 19.018, lon: 72.843 }, { id: 'N3', lat: 19.043, lon: 72.853 }, { id: 'N4', lat: 19.073, lon: 72.870 }, { id: 'N5', lat: 19.114, lon: 72.870 }, { id: 'N6', lat: 18.971, lon: 72.819 }, { id: 'N7', lat: 19.030, lon: 72.821 }],
+        nodes: [{ id: 'N1', lat: 18.940, lon: 72.836 }, { id: 'N2', lat: 19.018, lon: 72.843 }, { id: 'N3', lat: 19.043, lon: 72.853 }, { id: 'N4', lat: 19.073, lon: 72.870 }, { id: 'N5', lat: 19.114, lon: 72.870 }, { id: 'N6', lat: 18.971, lon: 72.830 }, { id: 'N7', lat: 19.030, lon: 72.835 }],
         edges: [{ from: 'N1', to: 'N6', weight: 4.2 }, { from: 'N6', to: 'N2', weight: 5.1 }, { from: 'N2', to: 'N3', weight: 3.5 }, { from: 'N3', to: 'N4', weight: 4.8 }, { from: 'N4', to: 'N5', weight: 6.2 }, { from: 'N7', to: 'N2', weight: 2.8 }, { from: 'N7', to: 'N3', weight: 2.1 }]
     },
     evacuationZones: [{ id: 'ZONE-RED-1', name: 'Mithi River Basin', type: 'DANGER', coords: [[19.050, 72.850], [19.060, 72.860], [19.080, 72.870], [19.070, 72.880], [19.040, 72.860]] }, { id: 'ZONE-GREEN-1', name: 'Bandra Reclamation High', type: 'SAFE', coords: [[19.030, 72.815], [19.035, 72.825], [19.025, 72.825], [19.020, 72.815]] }],
-    activePaths: [{ id: 'FLIGHT-A', type: 'FLIGHT', status: 'ACTIVE', coords: [[19.043, 72.853], [19.073, 72.860], [19.113, 72.880]] }, { id: 'HELI-B', type: 'HELI', status: 'ACTIVE', coords: [[19.010, 72.845], [19.030, 72.821], [19.055, 72.840]] }, { id: 'ROAD-C', type: 'ROAD', status: 'ACTIVE', coords: [[18.940, 72.836], [18.971, 72.819], [19.018, 72.843]] }]
+    activePaths: [{ id: 'FLIGHT-A', type: 'FLIGHT', status: 'ACTIVE', coords: [[19.043, 72.853], [19.073, 72.860], [19.113, 72.880]] }, { id: 'HELI-B', type: 'HELI', status: 'ACTIVE', coords: [[19.010, 72.845], [19.030, 72.835], [19.055, 72.840]] }, { id: 'ROAD-C', type: 'ROAD', status: 'ACTIVE', coords: [[18.940, 72.836], [18.971, 72.830], [19.018, 72.843]] }]
 }))

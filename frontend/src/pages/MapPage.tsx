@@ -26,28 +26,40 @@ const RISK_RADIUS: Record<string, number> = {
 }
 
 /* ── Landmark styling ── */
-const LANDMARK_STYLES: Record<string, { color: string; label: string; shape: 'circle' | 'diamond' | 'square' | 'triangle' }> = {
-    port: { color: '#3B82F6', label: 'Ports', shape: 'diamond' },
-    station: { color: '#A78BFA', label: 'Stations', shape: 'square' },
-    market: { color: '#F59E0B', label: 'Markets', shape: 'circle' },
-    ship: { color: '#60A5FA', label: 'Ships', shape: 'diamond' },
-    flight: { color: '#C084FC', label: 'Flights', shape: 'triangle' },
-    shelter: { color: '#34D399', label: 'Shelters', shape: 'square' },
-    hospital: { color: '#F87171', label: 'Hospitals', shape: 'triangle' },
+const LANDMARK_STYLES: Record<string, { color: string; label: string; type: string }> = {
+    port: { color: '#3B82F6', label: 'Ports', type: 'port' },
+    station: { color: '#A78BFA', label: 'Stations', type: 'station' },
+    market: { color: '#F59E0B', label: 'Markets', type: 'market' },
+    ship: { color: '#60A5FA', label: 'Ships', type: 'ship' },
+    flight: { color: '#C084FC', label: 'Flights', type: 'flight' },
+    shelter: { color: '#34D399', label: 'Shelters', type: 'shelter' },
+    hospital: { color: '#F87171', label: 'Hospitals', type: 'hospital' },
 }
 
 /* ── Custom SVG Icon Makers ── */
-const createShapeIcon = (color: string, shape: string) => {
+const createShapeIcon = (color: string, type: string) => {
     let svg = ''
-    if (shape === 'diamond') svg = `<rect width="12" height="12" fill="${color}" transform="rotate(45 6 6)" />`
-    else if (shape === 'square') svg = `<rect width="12" height="12" fill="${color}" />`
-    else if (shape === 'triangle') svg = `<path d="M6 0L12 12H0Z" fill="${color}" />`
-    else svg = `<circle cx="6" cy="6" r="6" fill="${color}" />`
+    if (type === 'ship') {
+        svg = `<path d="M2.5 8L1 11H11L9.5 8H2.5Z" fill="${color}"/><path d="M4 8V5M8 8V4M6 8V2" stroke="${color}" stroke-width="1.5" stroke-linecap="round"/>`
+    } else if (type === 'flight') {
+        svg = `<path d="M6 2L10 6L11.5 5.5L7 1L6 2ZM6 2L2 6L0.5 5.5L5 1" fill="${color}"/><path d="M6 2V10" stroke="${color}" stroke-width="1.5"/>`
+    } else if (type === 'hospital') {
+        svg = `<rect width="10" height="10" x="1" y="1" rx="2" fill="${color}"/><path d="M6 3V9M3 6H9" stroke="#fff" stroke-width="1.5"/>`
+    } else if (type === 'shelter') {
+        svg = `<path d="M6 1L1 5V11H11V5L6 1Z" fill="${color}"/><rect x="5" y="7" width="2" height="4" fill="#fff"/>`
+    } else if (type === 'station') {
+        svg = `<rect width="12" height="8" y="2" rx="1" fill="${color}"/><circle cx="3" cy="10" r="1.5" fill="${color}"/><circle cx="9" cy="10" r="1.5" fill="${color}"/>`
+    } else if (type === 'port') {
+        svg = `<path d="M6 2V10M4 10H8M4 5C4 7 8 7 8 5" stroke="${color}" stroke-width="1.5" fill="none"/><circle cx="6" cy="2" r="1" fill="${color}"/>`
+    } else {
+        svg = `<circle cx="6" cy="6" r="5" fill="${color}" stroke="#fff" stroke-width="1"/>`
+    }
 
     return L.divIcon({
         className: 'custom-map-icon',
-        html: `<svg width="12" height="12" viewBox="0 0 12 12">${svg}</svg>`,
-        iconSize: [12, 12],
+        html: `<svg width="14" height="14" viewBox="0 0 12 12">${svg}</svg>`,
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
     })
 }
 
@@ -164,6 +176,37 @@ function FloodExtentLayer() {
     )
 }
 
+/* ── Sea Tides Animated Effect ── */
+function SeaTidesLayer() {
+    const TIDE_LINES = Array.from({ length: 7 }).map((_, i) => {
+        const coords: [number, number][] = []
+        const baseLon = 72.76 + (i * 0.015) // Spread lines offshore
+        for (let lat = 18.90; lat <= 19.15; lat += 0.01) {
+            const lonOffset = Math.sin(lat * 50 + i) * 0.005
+            coords.push([lat, baseLon + lonOffset])
+        }
+        return coords
+    })
+
+    return (
+        <g>
+            {TIDE_LINES.map((coords, i) => (
+                <Polyline
+                    key={`tide-${i}`}
+                    positions={coords}
+                    pathOptions={{
+                        color: i % 2 === 0 ? 'var(--cyan-400)' : 'var(--blue-400)',
+                        weight: 1.5 + (i % 2),
+                        opacity: 0.15,
+                        dashArray: `${10 + i * 5}, ${20 + i * 10}`,
+                        className: 'wave-anim'
+                    }}
+                />
+            ))}
+        </g>
+    )
+}
+
 /* ── View Mode Switcher Component ── */
 function TileLayerSwitcher({ view }: { view: ViewMode }) {
     return (
@@ -177,6 +220,7 @@ function TileLayerSwitcher({ view }: { view: ViewMode }) {
 
 /* ── LAYER DEFINITIONS ── */
 const LAYER_DEFS = [
+    { id: 'seaTides', label: 'Sea Tides Dynamics', color: '#3B82F6', description: 'Arabian Sea currents' },
     { id: 'floodExtent', label: 'Flood Extent', color: '#06B6D4', description: 'Live water spread' },
     { id: 'riskZones', label: 'Risk Zones', color: '#DC2626', description: 'Severity overlay' },
     { id: 'heatmap', label: 'Population Density', color: '#F97316', description: 'Heat map' },
@@ -197,7 +241,7 @@ const LAYER_DEFS = [
 export default function MapPage() {
     const { zones, drones, landmarks, role, evacuationZones, activePaths, roadNetwork } = useAegisStore()
     const [activeLayers, setActiveLayers] = useState<Set<string>>(
-        new Set(['floodExtent', 'riskZones', 'drones', 'stations', 'shelters', 'evacZones', 'activePaths'])
+        new Set(['seaTides', 'floodExtent', 'riskZones', 'drones', 'stations', 'shelters', 'evacZones', 'activePaths'])
     )
     const [navPath, setNavPath] = useState<[number, number][]>([])
     const [navStart, setNavStart] = useState<string>('N1')
@@ -236,6 +280,9 @@ export default function MapPage() {
                 zoomControl={false}>
 
                 <TileLayerSwitcher view={viewMode} />
+
+                {/* Sea Tides Animation */}
+                {activeLayers.has('seaTides') && <SeaTidesLayer />}
 
                 {/* Live Flood Extent — animated water spreading */}
                 {activeLayers.has('floodExtent') && <FloodExtentLayer />}
@@ -290,7 +337,7 @@ export default function MapPage() {
                             <Popup><div style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)', fontSize: 12 }}>
                                 <strong>{lm.name}</strong><br /><em>{type.toUpperCase()}</em>
                             </div></Popup>
-                            <Marker position={[lm.lat, lm.lon]} icon={createShapeIcon(cfg.color, cfg.shape)} />
+                            <Marker position={[lm.lat, lm.lon]} icon={createShapeIcon(cfg.color, cfg.type)} />
                         </CircleMarker>
                     ))
                 })}

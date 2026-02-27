@@ -412,3 +412,41 @@
     font-family: var(--font-mono);
     letter-spacing: 0.1em;
 }
+
+/* ── Live Map Animations ── */
+@keyframes path-blink-anim {
+
+    0%,
+    100% {
+        opacity: 0.9;
+        stroke: var(--red-500);
+        filter: drop-shadow(0 0 8px var(--red-500));
+    }
+
+    50% {
+        opacity: 0.4;
+        stroke: var(--amber-400);
+        filter: none;
+    }
+}
+
+.path-blink {
+    animation: path-blink-anim 1.5s ease-in-out infinite;
+}
+
+@keyframes wave-flow {
+    0% {
+        stroke-dashoffset: 1000;
+        opacity: 0.1;
+    }
+
+    50% {
+        opacity: 0.5;
+        stroke-width: 2px;
+    }
+
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0.1;
+    }
+}
