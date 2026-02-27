@@ -4,7 +4,7 @@
 
 An **AI-powered, offline-first coastal flood prediction engine** built for the AMD Slingshot Hackathon. AEIGS uses real-time drone data simulation, computer vision (YOLOv8 on ONNX Runtime/DirectML), and coastal hydrodynamic equations (Stockdon 2006) to predict which streets will be underwater before the water arrives.
 
-**Target City:** Visakhapatnam (Vizag), Andhra Pradesh, India — one of India's most cyclone-vulnerable coastal cities.
+**Target City:** MUMBAI, Andhra Pradesh, India — India's Financial Capital.
 
 ---
 
