@@ -1,0 +1,26 @@
+{
+  "generated_at": "2026-02-27T18:14:57.471601",
+  "total_records": 17520,
+  "date_range": {
+    "start": "2023-01-01T00:00:00Z",
+    "end": "2024-12-30T23:00:00Z"
+  },
+  "stations": 10,
+  "cyclone_events_injected": 18,
+  "storm_records": 376,
+  "critical_records": 0,
+  "features": [
+    "wave_height_m",
+    "period_s",
+    "temp_c",
+    "wind_speed_mps",
+    "pressure_hpa"
+  ],
+  "targets": [
+    "runup_m",
+    "risk_level"
+  ],
+  "physics_model": "Stockdon2006",
+  "seasonal_model": "Indian Monsoon (4-season)",
+  "brownian_model": "Ornstein-Uhlenbeck mean-reverting"
+}

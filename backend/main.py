@@ -1,5 +1,5 @@
 """
-AEGIS Cortex v5.3 — FastAPI Backend
+AEGIS Cortex - FastAPI Backend
 AI-Powered Predictive Flood Monitoring System
 Target: Visakhapatnam (Vizag), Andhra Pradesh, India
 """
@@ -11,13 +11,16 @@ import time
 import random
 import sys
 import os
+import numpy as np
+from collections import deque
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from aegis_sim.engine import calculate_stockdon_runup, calculate_flood_risk
 from aegis_sim.inference import InferenceEngine
+from aegis_sim.recorder import get_recorder
 
-app = FastAPI(title="AEGIS Cortex", version="5.3",
-              description="AI-Powered Predictive Flood Monitoring — Visakhapatnam, India")
+app = FastAPI(title="AEGIS Cortex", version="1.0",
+              description="AI-Powered Predictive Flood Monitoring - Visakhapatnam, India")
 
 app.add_middleware(
     CORSMiddleware, allow_origins=["*"], allow_credentials=True,
@@ -25,10 +28,10 @@ app.add_middleware(
 )
 
 inference = InferenceEngine()
+recorder = get_recorder()
+sensor_buffer = deque(maxlen=24)
+PREDICTION_MODE = "hybrid"
 
-# ═══════════════════════════════════════════════════════════
-# VISAKHAPATNAM (VIZAG) — COASTAL CITY DATA
-# ═══════════════════════════════════════════════════════════
 
 CITY = {
     "name": "Visakhapatnam",
@@ -40,27 +43,27 @@ CITY = {
 }
 
 SECTORS = {
-    "Sector 1 — RK Beach": {
+    "Sector 1 - RK Beach": {
         "wall_height": 2.5, "population": 12000,
         "lat": 17.7145, "lon": 83.3255,
         "structural_integrity": 78, "grid_integrity": 85,
     },
-    "Sector 2 — Rushikonda": {
+    "Sector 2 - Rushikonda": {
         "wall_height": 3.0, "population": 5000,
         "lat": 17.7583, "lon": 83.3783,
         "structural_integrity": 91, "grid_integrity": 92,
     },
-    "Sector 3 — Fishing Harbour": {
+    "Sector 3 - Fishing Harbour": {
         "wall_height": 1.8, "population": 25000,
         "lat": 17.6920, "lon": 83.2938,
         "structural_integrity": 62, "grid_integrity": 71,
     },
-    "Sector 4 — Port Area": {
+    "Sector 4 - Port Area": {
         "wall_height": 4.5, "population": 8000,
         "lat": 17.6808, "lon": 83.2790,
         "structural_integrity": 88, "grid_integrity": 90,
     },
-    "Sector 5 — Lawson's Bay": {
+    "Sector 5 - Lawson's Bay": {
         "wall_height": 2.2, "population": 6500,
         "lat": 17.7285, "lon": 83.3408,
         "structural_integrity": 74, "grid_integrity": 80,
@@ -137,7 +140,6 @@ DRONES = [
      "signal_dbm": -68, "data_rate": "4kb/s"},
 ]
 
-# New Maritime Data for v5.3
 SHIPS = [
     {"id": "mv-101", "name": "MV Bengal Tiger", "type": "cargo", "status": "In Transit", "speed_knots": 12.5, "lat": 17.6500, "lon": 83.3500, "heading": 310},
     {"id": "mv-102", "name": "INS Jalashwa", "type": "military", "status": "Patrol", "speed_knots": 18.0, "lat": 17.6200, "lon": 83.4000, "heading": 290},
@@ -159,7 +161,6 @@ POPULATION_HOTSPOTS = [
     {"lat": 17.7583, "lon": 83.3783, "density": "Low", "count": 5000, "label": "Rushikonda IT Park"},
 ]
 
-# ═══════════════════════════════════════════════════════════
 
 class ConnectionManager:
     def __init__(self):
@@ -288,10 +289,22 @@ async def telemetry_loop():
 
         H0 = max(0.5, 2.0 + 1.2 * math.sin(elapsed * 0.025) + random.uniform(-0.1, 0.1))
         T = max(5, 9.0 + 2.0 * math.cos(elapsed * 0.018))
+        wind = max(1, 6.0 + 3.0 * math.sin(elapsed * 0.03) + random.uniform(-0.5, 0.5))
+        pressure = max(970, 1008 - 8 * math.sin(elapsed * 0.02) + random.uniform(-1, 1))
+        temp = get_coastal_temp()
 
         runup = calculate_stockdon_runup(H0, T, CITY["beach_slope"])
         min_wall = min(s["wall_height"] for s in SECTORS.values())
         overall_risk = calculate_flood_risk(runup, min_wall)
+
+        sensor_buffer.append([H0, T, temp, wind, pressure])
+        
+        lstm_prediction = None
+        hybrid_prediction = None
+        if len(sensor_buffer) >= 24:
+            sequence = np.array(list(sensor_buffer), dtype=np.float32)
+            lstm_prediction = inference.predict_lstm(sequence)
+            hybrid_prediction = inference.predict_hybrid(sequence, runup, alpha=0.6)
 
         sectors = compute_sector_risks(runup)
         roads, safe_routes = compute_road_status(runup)
@@ -329,17 +342,27 @@ async def telemetry_loop():
         for name, s in sectors.items():
             if s["status"] == "CRITICAL" and random.random() < 0.015:
                 ts = time.strftime("%H:%M")
-                alert_log.append({"time": ts, "message": f"{name} — Risk Level CRITICAL",
+                alert_log.append({"time": ts, "message": f"{name} - Risk Level CRITICAL",
                                   "severity": "critical", "type": "risk"})
             elif s["status"] == "HIGH" and random.random() < 0.008:
                 ts = time.strftime("%H:%M")
-                alert_log.append({"time": ts, "message": f"{name} — Risk Updated to HIGH",
+                alert_log.append({"time": ts, "message": f"{name} - Risk Updated to HIGH",
                                   "severity": "high", "type": "risk"})
         
         while len(alert_log) > 30:
             alert_log.pop(0)
 
         peak_prediction_time = "06:00 AM" if H0 < 2.5 else "04:30 AM"
+
+        recorder.record_telemetry(
+            ocean={"wave_height_m": H0, "wave_period_s": T, "wind_speed_mps": wind,
+                   "pressure_hpa": pressure, "temp_c": temp},
+            physics={"runup_m": runup, "overall_risk": overall_risk},
+            lstm=lstm_prediction,
+            system={"inference_device": inference.get_device_status(),
+                    "model_loaded": inference.lstm_loaded},
+            mode=PREDICTION_MODE,
+        )
 
         payload = {
             "type": "telemetry",
@@ -348,19 +371,25 @@ async def telemetry_loop():
             "ocean": {
                 "wave_height_m": round(H0, 2),
                 "wave_period_s": round(T, 1),
+                "wind_speed_mps": round(wind, 2),
+                "pressure_hpa": round(pressure, 1),
+                "temp_c": temp,
             },
             "physics": {
                 "runup_m": round(runup, 3),
                 "overall_risk": overall_risk,
                 "max_runup_m": round(max(f["runup_m"] for f in forecast), 3),
             },
+            "lstm_prediction": lstm_prediction,
+            "hybrid_prediction": hybrid_prediction,
+            "prediction_mode": PREDICTION_MODE,
             "risk_zone": risk_zone,
             "window_for_action": window,
             "key_metrics": {
                 "max_wave_runup": round(runup, 2),
                 "affected_population": total_affected,
                 "safe_routes": f"{safe_routes}/{len(roads)}",
-                "coastal_temp_c": get_coastal_temp(),
+                "coastal_temp_c": temp,
                 "est_water_level_m": round(runup, 1),
                 "rate_of_rise": f"+{random.uniform(0.2, 0.8):.1f}cm/hr",
                 "risk_velocity": round(random.uniform(8, 18), 1),
@@ -377,12 +406,16 @@ async def telemetry_loop():
             "ports": PORTS,
             "population_hotspots": POPULATION_HOTSPOTS,
             "alerts": alert_log[-10:],
+            "recording": recorder.get_stats(),
             "system": {
                 "inference_device": inference.get_device_status(),
                 "onnx_providers": inference.providers,
                 "model_loaded": inference.session is not None,
+                "lstm_loaded": inference.lstm_loaded,
                 "update_hz": 2,
                 "physics_engine": "Stockdon2006",
+                "lstm_engine": "AEGIS-LSTM-v1" if inference.lstm_loaded else "Mock",
+                "prediction_mode": PREDICTION_MODE,
             }
         }
         await mgr.broadcast(payload)
@@ -399,17 +432,17 @@ async def ws_telemetry(ws: WebSocket):
             msg = await ws.receive_text()
             if "AUTHORIZE" in msg:
                 ts = time.strftime("%H:%M")
-                alert_log.append({"time": ts, "message": "⚡ EVACUATION AUTHORIZED by Commander",
+                alert_log.append({"time": ts, "message": "EVACUATION AUTHORIZED by Commander",
                                   "severity": "critical", "type": "action"})
                 await mgr.broadcast({"type": "alert", "action": "EVACUATION_AUTHORIZED"})
             elif "DEPLOY_WARNING" in msg:
                 ts = time.strftime("%H:%M")
-                alert_log.append({"time": ts, "message": "🔊 Warning deployed to all zones",
+                alert_log.append({"time": ts, "message": "Warning deployed to all zones",
                                   "severity": "high", "type": "action"})
                 await mgr.broadcast({"type": "alert", "action": "WARNING_DEPLOYED"})
             elif "EMERGENCY_BROADCAST" in msg:
                 ts = time.strftime("%H:%M")
-                alert_log.append({"time": ts, "message": "📡 Emergency broadcast sent to all users",
+                alert_log.append({"time": ts, "message": "Emergency broadcast sent to all users",
                                   "severity": "critical", "type": "broadcast"})
                 await mgr.broadcast({"type": "alert", "action": "EMERGENCY_BROADCAST"})
     except WebSocketDisconnect:
@@ -417,20 +450,37 @@ async def ws_telemetry(ws: WebSocket):
 
 @app.get("/")
 def root():
-    return {"status": "AEGIS Cortex Online", "version": "5.3", "city": CITY["name"]}
+    return {"status": "AEGIS Cortex Online", "version": "1.0", "city": CITY["name"],
+            "lstm_loaded": inference.lstm_loaded, "prediction_mode": PREDICTION_MODE}
 
 @app.get("/api/system")
 def system_status():
     return {
         "name": "AEGIS",
-        "version": "5.3",
+        "version": "1.0",
         "city": CITY,
         "inference_device": inference.get_device_status(),
         "onnx_providers": inference.providers,
         "physics_engine": "Stockdon2006",
+        "lstm_engine": "AEGIS-LSTM-v1" if inference.lstm_loaded else "Not Loaded",
+        "prediction_mode": PREDICTION_MODE,
+        "model_status": inference.get_model_status(),
         "sectors": list(SECTORS.keys()),
         "roads": list(ROADS.keys()),
         "shelters": [s["name"] for s in SHELTERS],
         "drones": [d["name"] for d in DRONES],
         "ships": [s["name"] for s in SHIPS],
     }
+
+@app.get("/api/recordings")
+def get_recordings():
+    """Return recent recorded telemetry entries for audit trail."""
+    return {
+        "stats": recorder.get_stats(),
+        "recent": recorder.get_recent(50),
+    }
+
+@app.get("/api/model-status")
+def model_status():
+    """Return comprehensive model and inference status."""
+    return inference.get_model_status()

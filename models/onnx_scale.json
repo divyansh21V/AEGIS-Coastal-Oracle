@@ -1,0 +1,13 @@
+{
+  "target_min": 0.35429999232292175,
+  "target_max": 1.8143999576568604,
+  "seq_len": 24,
+  "horizon": 6,
+  "features": [
+    "wave_height_m",
+    "period_s",
+    "temp_c",
+    "wind_speed_mps",
+    "pressure_hpa"
+  ]
+}

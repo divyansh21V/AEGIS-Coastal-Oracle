@@ -32,5 +32,8 @@ pillow>=11.0.0
 # ── Data Pipeline ──
 requests>=2.32.0
 
+# ── LSTM Model Export ──
+onnx>=1.15.0
+
 # ── Supabase (used for data sync) ──
 supabase>=2.11.0

@@ -1,78 +1,86 @@
-# AEGIS Large-Scale Dataset Documentation (v3.0)
+# AEGIS Dataset Documentation
 
-This document describes the high-density automated data pipeline powering the AEGIS platform. The system simulates raw data scraping from multiple national and international environmental sources.
-
----
-
-## 🚀 Data Acquisition Pipeline
-All datasets in this version are generated/scraped via the [`scripts/massive_data_pipeline.py`](./scripts/massive_data_pipeline.py) automation suite. This simulates high-frequency ingestion from buoy networks, satellite registries, and municipal infrastructure databases.
+Documentation for the data pipeline and ML training infrastructure.
 
 ---
 
-## 🌊 1. Aggregated Buoy Telemetry (Hourly)
-**File:** [`data/aggregated_buoy_telemetry.csv`](./data/aggregated_buoy_telemetry.csv)
-**Scale:** **1,500+ records**
-**Source:** Simulated INCOIS / NOAA / NDBC global buoy ingestion.
+## 1. Aggregated Buoy Telemetry (Hourly)
+**File:** `data/aggregated_buoy_telemetry.csv`
+**Scale:** 17,520 records (2 years hourly)
 
 | Parameter | Unit | Description |
 |:---|:---|:---|
-| `wave_height_m` | m | Significant wave height (includes storm stochasticity) |
-| `wind_speed_mps`| m/s | Real-time wind velocity at 10m MSL |
-| `pressure_hpa` | hPa | Central barometric pressure (critical for storm tracking) |
-| `temp_c` | °C | Sea Surface Temperature (SST) |
-
-**AI Usage:** Training the Neural Engine on long-term time-series trends and seasonal anomalies.
+| `wave_height_m` | m | Significant wave height |
+| `period_s` | s | Wave period |
+| `wind_speed_mps`| m/s | Wind velocity at 10m MSL |
+| `pressure_hpa` | hPa | Central barometric pressure |
+| `temp_c` | C | Sea Surface Temperature |
+| `runup_m` | m | Stockdon R2% wave run-up (training target) |
+| `risk_level` | - | SAFE / HIGH / CRITICAL |
+| `is_cyclone_event` | 0/1 | Whether record is during a cyclone |
+| `cyclone_intensity` | 0-1 | Cyclone severity factor |
 
 ---
 
-## 🗺️ 2. Scraped Coastal Sectors (Spatial)
-**File:** [`data/scraped_coastal_sectors.csv`](./data/scraped_coastal_sectors.csv)
-**Scale:** **300 unique sectors**
-**Coverage:** 9 Indian Coastal States (Gujarat to Bengal).
+## 2. Coastal Sectors
+**File:** `data/scraped_coastal_sectors.csv`
+**Scale:** 400 sectors across 8 Indian coastal states
 
 | Field | Description |
 |:---|:---|
-| `risk_level` | Model-derived risk (`SAFE` to `CRITICAL`) |
-| `population` | Census-mapped residents within sector polygon |
-| `elevation_m` | Mean terrain elevation (SRTM/CartoDEM) |
-| `slope_beta` | Beach profile slope for run-up calculation |
+| `risk_level` | Elevation-correlated risk |
+| `population` | Census-mapped residents |
+| `elevation_m` | Mean terrain elevation |
+| `slope_beta` | Beach profile slope |
+| `drainage_score` | Drainage capacity (20-95) |
 
 ---
 
-## 🏗️ 3. Infrastructure Master Asset Registry
-**File:** [`data/infrastructure_master.csv`](./data/infrastructure_master.csv)
-**Scale:** **600+ registered assets**
-**Types:** Bridges, Sea Walls, Shelters, Hospitals, Power Plants, Roads.
+## 3. Infrastructure Registry
+**File:** `data/infrastructure_master.csv`
+**Scale:** 800+ assets (sea walls, bridges, shelters, hospitals, etc.)
 
-| Asset Type | Primary Mitigation Use |
+---
+
+## 4. Historical Cyclone Catalog
+**File:** `data/historical_cyclones_extended.csv`
+**Scale:** 46 records (16 real IMD + 30 synthetic), 1970-2024
+
+---
+
+## 5. YOLO Training Labels
+**Location:** `data/floodnet_yolo/labels/sample/`
+**Scale:** 200 annotated frames (YOLOv8 format)
+
+---
+
+## 6. LSTM Model
+
+### Architecture
+| Component | Detail |
 |:---|:---|
-| `sea_wall` | Overtopping and barrier integrity analysis |
-| `shelter` | Dynamic evacuation capacity mapping |
-| `road_segment` | Graph-theory based emergency routing |
+| Type | 2-layer LSTM + FC Head |
+| Input | (batch, 24, 5) - 24h lookback x 5 features |
+| Output | (batch, 6) - 6h runup forecast |
+| Hidden | 64 units, dropout 0.2 |
+| Export | PyTorch .pt + ONNX .onnx |
 
----
+### Model Files
+- `models/aegis_lstm.pt` - PyTorch checkpoint
+- `models/aegis_lstm.onnx` - ONNX for DirectML inference
+- `models/scaler_params.json` - Feature normalization
+- `models/onnx_scale.json` - Target denormalization
 
-## 👁️ 4. ML Training Corpus (YOLOv8)
-**Format:** YOLO v8 (Deep Annotation Matrix)
-**Location:** [`data/floodnet_yolo/labels/sample/`](./data/floodnet_yolo/labels/sample/)
-**Scale:** **150+ annotated frames** (Simulating a part of the 2,000 image FloodNet set).
-
-**Classification Matrix:**
-0. `water` 
-1. `road` 
-2. `building` 
-3. `debris` 
-4. `vehicle` 
-5. `vegetation`
-
-**Training Flow:**
-The [`training/train_yolo.py`](../training/train_yolo.py) script is configured to process this high-density annotation matrix, exporting to **ONNX** for real-time edge inference on AEGIS drones.
-
----
-
-## 🛠️ Automated Pipeline Execution
-To refresh the dataset with new stochastic variances, run:
+### Pipeline
 ```bash
 python scripts/massive_data_pipeline.py
+python training/train_lstm.py --epochs 15
+python -m uvicorn backend.main:app --reload --port 8000
 ```
-This script acts as the "Scraper Engine" for the hackathon demonstration, showing how raw data is converted into actionable intelligence.
+
+---
+
+## 7. Timestamp Data Recording
+**Location:** `data/recordings/recording_YYYY-MM-DD.csv`
+
+Records every prediction tick with ISO timestamps, physics output, LSTM forecasts, and risk levels for audit trails.

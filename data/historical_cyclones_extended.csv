@@ -1,0 +1,46 @@
+cyclone_id,name,year,month,category,max_wind_kmh,central_pressure_hpa,landfall_lat,landfall_lon,landfall_location,surge_height_m,rainfall_mm_24h,affected_population,deaths,damage_inr_cr,duration_hours,track_length_km,source
+TC-2024-01,REMAL,2024,,Severe Cyclonic Storm,120,982,21.65,88.18,Sagar Island WB,2.8,185,4200000,24,890,,,IMD-Bulletin
+TC-2023-02,MICHAUNG,2023,,Very Severe Cyclonic Storm,140,976,13.08,80.28,Chennai TN,1.8,245,6800000,17,1250,,,IMD-Bulletin
+TC-2023-01,BIPARJOY,2023,,Extremely Severe Cyclonic Storm,195,950,23.10,68.45,Jakhau Gujarat,3.2,120,2100000,2,480,,,IMD-Bulletin
+TC-2022-01,MANDOUS,2022,,Severe Cyclonic Storm,100,988,12.18,80.12,Mahabalipuram TN,1.2,180,3400000,8,620,,,IMD-Bulletin
+TC-2021-02,JAWAD,2021,,Cyclonic Storm,85,992,19.30,84.95,Puri Odisha,0.8,95,1800000,4,210,,,IMD-Bulletin
+TC-2021-01,GULAB,2021,,Severe Cyclonic Storm,110,984,18.20,84.20,Kalingapatnam AP,1.5,155,2900000,12,780,,,IMD-Bulletin
+TC-2020-01,AMPHAN,2020,,Super Cyclonic Storm,240,920,21.65,88.30,Sundarbans WB,5.2,280,14500000,98,12000,,,IMD-Bulletin
+TC-2019-02,BULBUL,2019,,Very Severe Cyclonic Storm,150,970,21.85,88.70,Dhamra Odisha,2.1,165,5200000,41,2400,,,IMD-Bulletin
+TC-2019-01,FANI,2019,,Extremely Severe Cyclonic Storm,215,932,19.88,85.88,Puri Odisha,4.5,300,28000000,89,26000,,,IMD-Bulletin
+TC-2018-01,TITLI,2018,,Very Severe Cyclonic Storm,165,960,19.18,84.62,Gopalpur Odisha,1.8,210,5700000,85,3200,,,IMD-Bulletin
+TC-2014-01,HUDHUD,2014,,Extremely Severe Cyclonic Storm,215,940,17.72,83.30,Visakhapatnam AP,4.8,350,9200000,124,21908,,,IMD-Bulletin
+TC-2013-01,PHAILIN,2013,,Very Severe Cyclonic Storm,220,940,19.30,84.90,Gopalpur Odisha,3.5,280,13200000,45,4260,,,IMD-Bulletin
+TC-1999-01,SUPER CYCLONE,1999,,Super Cyclonic Storm,260,912,20.75,86.98,Paradip Odisha,7.5,480,15000000,9887,28000,,,IMD-Bulletin
+TC-1996-01,VIZAG CYCLONE,1996,,Super Cyclonic Storm,235,924,17.68,83.22,Visakhapatnam AP,5.0,400,7800000,978,11200,,,IMD-Bulletin
+TC-1977-01,DIVISEEMA,1977,,Super Cyclonic Storm,250,918,16.50,81.20,Diviseema AP,6.0,520,3400000,10000,5000,,,IMD-Bulletin
+TC-SYN-001,DIYA,2017,11,Severe Cyclonic Storm,155,939,17.67,83.09,Visakhapatnam AP,1.8,206,6263227,49,2470,96,820,Synthetic-IMD-Pattern
+TC-SYN-002,SURYA,1986,11,Extremely Severe Cyclonic Storm,71,920,23.29,68.6,Jakhau Gujarat,2.4,257,3352837,282,16350,150,1043,Synthetic-IMD-Pattern
+TC-SYN-003,VAAYU,2006,11,Severe Cyclonic Storm,97,954,11.96,79.9,Mahabalipuram TN,6.2,159,14924923,368,10438,42,712,Synthetic-IMD-Pattern
+TC-SYN-004,JALA,1989,10,Very Severe Cyclonic Storm,185,982,17.63,82.81,Visakhapatnam AP,3.2,91,5452665,497,792,94,1754,Synthetic-IMD-Pattern
+TC-SYN-005,MEGH,2007,5,Cyclonic Storm,238,967,19.24,84.79,Puri Odisha,1.1,476,4891122,413,11890,40,1754,Synthetic-IMD-Pattern
+TC-SYN-006,ROSHNI,2023,4,Very Severe Cyclonic Storm,88,948,19.03,85.34,Puri Odisha,1.6,168,7427655,163,7662,49,2012,Synthetic-IMD-Pattern
+TC-SYN-007,AGNI,2007,12,Severe Cyclonic Storm,228,952,21.35,87.74,Sundarbans WB,1.1,212,13701385,429,7701,142,1535,Synthetic-IMD-Pattern
+TC-SYN-008,NEERJA,1971,5,Severe Cyclonic Storm,241,951,17.69,83.26,Visakhapatnam AP,6.7,147,14918564,96,21377,96,1870,Synthetic-IMD-Pattern
+TC-SYN-009,TARA,1973,4,Severe Cyclonic Storm,254,963,21.2,88.24,Sundarbans WB,5.4,337,6114181,387,8796,76,1293,Synthetic-IMD-Pattern
+TC-SYN-010,GARJANA,2016,4,Super Cyclonic Storm,74,943,22.78,68.13,Jakhau Gujarat,4.4,398,10048354,467,11770,121,881,Synthetic-IMD-Pattern
+TC-SYN-011,SHREYA,2003,5,Extremely Severe Cyclonic Storm,204,947,13.46,79.95,Chennai TN,3.8,364,14438616,179,16053,129,1409,Synthetic-IMD-Pattern
+TC-SYN-012,MANDIRA,1985,12,Extremely Severe Cyclonic Storm,137,912,18.22,83.77,Visakhapatnam AP,0.8,296,7617097,340,28696,104,1812,Synthetic-IMD-Pattern
+TC-SYN-013,DAKSHA,1976,4,Very Severe Cyclonic Storm,136,985,17.58,83.65,Visakhapatnam AP,3.2,433,6503312,13,7883,72,2084,Synthetic-IMD-Pattern
+TC-SYN-014,SAHARA,1972,5,Severe Cyclonic Storm,139,919,22.87,68.95,Jakhau Gujarat,4.3,259,7388852,205,21927,148,303,Synthetic-IMD-Pattern
+TC-SYN-015,URJA,1994,11,Very Severe Cyclonic Storm,200,953,13.35,79.95,Chennai TN,5.3,105,636381,62,19788,91,1533,Synthetic-IMD-Pattern
+TC-SYN-016,TEJAS,2019,10,Severe Cyclonic Storm,84,918,11.83,79.98,Mahabalipuram TN,1.9,203,981973,481,1167,64,2430,Synthetic-IMD-Pattern
+TC-SYN-017,VARUN,2019,4,Very Severe Cyclonic Storm,156,995,21.78,88.45,Sundarbans WB,6.7,347,2640692,316,25139,96,1501,Synthetic-IMD-Pattern
+TC-SYN-018,AMRIT,2012,12,Very Severe Cyclonic Storm,158,993,21.63,88.01,Sundarbans WB,3.4,238,4160320,171,29389,152,393,Synthetic-IMD-Pattern
+TC-SYN-019,KAVERI,2000,5,Very Severe Cyclonic Storm,253,987,22.09,88.27,Sundarbans WB,4.6,495,2651744,306,7182,52,1628,Synthetic-IMD-Pattern
+TC-SYN-020,GODAVARI,1998,12,Extremely Severe Cyclonic Storm,209,979,17.88,83.74,Visakhapatnam AP,5.6,247,12570345,281,9821,139,2498,Synthetic-IMD-Pattern
+TC-SYN-021,NARMADA,1992,10,Cyclonic Storm,168,936,11.83,80.02,Mahabalipuram TN,5.4,413,9060473,71,8366,56,1326,Synthetic-IMD-Pattern
+TC-SYN-022,TAPTI,1982,4,Very Severe Cyclonic Storm,91,924,23.24,68.7,Jakhau Gujarat,0.7,496,12789915,409,24255,47,1754,Synthetic-IMD-Pattern
+TC-SYN-023,SABARI,1981,12,Very Severe Cyclonic Storm,218,960,22.76,68.61,Jakhau Gujarat,1.3,471,12260651,156,26616,113,774,Synthetic-IMD-Pattern
+TC-SYN-024,GIRI,1987,5,Extremely Severe Cyclonic Storm,102,971,17.98,83.33,Visakhapatnam AP,4.0,162,1149478,103,3442,68,851,Synthetic-IMD-Pattern
+TC-SYN-025,UDAY,2018,12,Super Cyclonic Storm,92,952,12.28,79.93,Mahabalipuram TN,6.5,239,7513080,241,2145,44,1443,Synthetic-IMD-Pattern
+TC-SYN-026,SHANTI,2010,11,Super Cyclonic Storm,108,947,18.97,84.91,Puri Odisha,3.3,443,10512278,330,19581,161,2298,Synthetic-IMD-Pattern
+TC-SYN-027,ANKUR,2016,11,Extremely Severe Cyclonic Storm,250,949,23.51,68.24,Jakhau Gujarat,1.9,246,4709430,222,16331,116,1352,Synthetic-IMD-Pattern
+TC-SYN-028,PRITHVI,1975,10,Very Severe Cyclonic Storm,216,955,12.05,80.47,Mahabalipuram TN,2.3,280,14073235,217,23717,98,1422,Synthetic-IMD-Pattern
+TC-SYN-029,VEERA,2016,10,Extremely Severe Cyclonic Storm,134,920,21.95,88.08,Sundarbans WB,5.8,420,3783525,441,16048,168,2472,Synthetic-IMD-Pattern
+TC-SYN-030,SINDHU,2008,10,Very Severe Cyclonic Storm,135,995,11.92,80.45,Mahabalipuram TN,2.8,139,1790227,149,18016,83,1377,Synthetic-IMD-Pattern
