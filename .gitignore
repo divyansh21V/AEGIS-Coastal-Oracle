@@ -73,3 +73,6 @@ yarn-error.log*
 .cache/
 .parcel-cache/
 *.tgz
+
+# Local Netlify folder
+.netlify
