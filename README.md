@@ -4,7 +4,7 @@
 
 An **AI-powered, offline-first coastal flood prediction engine** built for the AMD Slingshot Hackathon. AEIGS uses real-time drone data simulation, computer vision (YOLOv8 on ONNX Runtime/DirectML), and coastal hydrodynamic equations (Stockdon 2006) to predict which streets will be underwater before the water arrives.
 
-**🔗 [Live Demo Link (For Hackathon Judges)](https://aegis-coastal-oracle.vercel.app/)**
+**🔗 [Local Demo Instructions (For Hackathon Judges)](#-live-demo-setup-for-judges)**
 
 **Target City:** Mumbai, Maharashtra, India — India's Financial Capital.
 
@@ -567,6 +567,19 @@ streamlit run aegis_sim/app.py
 ```bash
 python scripts/massive_data_pipeline.py
 ```
+
+### 🚀 Live Demo Setup (For Judges)
+To run the demo on the judge's laptop via Local Area Network (LAN):
+1. **Start the FastAPI backend with host exposed:**
+   ```bash
+   python -m uvicorn backend.main:app --host 0.0.0.0 --port 8000
+   ```
+2. **Start the Vite React frontend with host exposed:**
+   ```bash
+   cd frontend
+   npm run dev -- --host
+   ```
+3. The Vite terminal will print a "Network" URL (e.g., `http://192.168.1.5:5173/`). Point the judge's laptop browser to that link!
 
 ### Verify
 | Service | URL |

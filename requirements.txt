@@ -1,6 +1,16 @@
 # ═══════════════════════════════════════════════════════════════
-# AEGIS — Python Dependencies (Root)
-# Unified requirements for backend, aegis_sim, training, scripts
+# 🌐 AEGIS — FULL STACK REQUIREMENTS SUMMARY
+# ═══════════════════════════════════════════════════════════════
+# This repository contains a Full-Stack application.
+#
+# 1. FRONTEND: TypeScript, React, and CSS (Vite & Tailwind)
+#    -> All frontend dependencies are managed via npm.
+#    -> Please refer to `frontend/package.json` for TypeScript, UI, and CSS packages.
+#    -> Install via: `cd frontend && npm install`
+#
+# 2. BACKEND: Python (FastAPI, YOLOv8 ML, Physics Engine)
+#    -> All Python dependencies are managed via pip.
+#    -> Listed below. Install via: `pip install -r requirements.txt`
 # ═══════════════════════════════════════════════════════════════
 
 # ── Backend (FastAPI + WebSocket Server) ──
