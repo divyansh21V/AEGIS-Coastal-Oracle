@@ -166,16 +166,16 @@ export default function Dashboard() {
 
                     <div style={{
                         flex: 1, display: 'flex', flexDirection: 'column',
-                        background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-                        border: '1px solid rgba(239, 68, 68, 0.15)',
+                        background: 'var(--bg-card)',
+                        border: '1px solid var(--border-subtle)',
                         borderRadius: 16, overflow: 'hidden',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                        boxShadow: 'var(--shadow-md)',
                     }}>
                         <div style={{
                             padding: '14px 20px',
                             display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                            borderBottom: '1px solid rgba(255,255,255,0.06)',
-                            background: 'rgba(239, 68, 68, 0.04)',
+                            borderBottom: '1px solid var(--border-subtle)',
+                            background: 'var(--bg-elevated)',
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                                 <AlertTriangle size={14} color="#EF4444" />
@@ -193,9 +193,9 @@ export default function Dashboard() {
                                     letterSpacing: '0.06em',
                                 }}>{store.alerts.filter((a: any) => !a.read).length} NEW</span>
                                 <button onClick={() => navigate('/alerts')} style={{
-                                    fontSize: 9, fontWeight: 700, color: '#64748B',
-                                    background: 'rgba(255,255,255,0.05)',
-                                    border: '1px solid rgba(255,255,255,0.08)',
+                                    fontSize: 9, fontWeight: 700, color: 'var(--text-secondary)',
+                                    background: 'var(--bg-overlay)',
+                                    border: '1px solid var(--border-strong)',
                                     borderRadius: 6, padding: '4px 10px', cursor: 'pointer',
                                     letterSpacing: '0.05em',
                                 }}>Mark All Read</button>
@@ -215,14 +215,14 @@ export default function Dashboard() {
                                         style={{
                                             display: 'flex', flexDirection: 'column', gap: 6,
                                             padding: '14px 20px',
-                                            borderBottom: '1px solid rgba(255,255,255,0.04)',
+                                            borderBottom: '1px solid var(--border-subtle)',
                                             borderLeft: `3px solid ${c}`,
                                             opacity: alert.read ? 0.5 : 1,
                                             cursor: 'pointer',
                                             transition: 'all 0.2s ease',
                                             background: 'transparent',
                                         }}
-                                        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.03)')}
+                                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--bg-overlay)')}
                                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                                     >
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -233,19 +233,19 @@ export default function Dashboard() {
                                                 letterSpacing: '0.06em',
                                             }}>{alert.severity}</span>
                                             <span style={{
-                                                fontSize: 12, fontWeight: 600, color: '#E2E8F0',
+                                                fontSize: 12, fontWeight: 600, color: 'var(--text-primary)',
                                                 flex: 1,
                                             }}>{alert.title}</span>
-                                            <ChevronRight size={12} style={{ color: '#475569' }} />
+                                            <ChevronRight size={12} style={{ color: 'var(--text-muted)' }} />
                                         </div>
                                         <div style={{
                                             display: 'flex', alignItems: 'center', gap: 8,
-                                            fontSize: 10, color: '#64748B',
+                                            fontSize: 10, color: 'var(--text-secondary)',
                                         }}>
                                             <Clock size={9} />
                                             <span>{alert.time}</span>
-                                            <span style={{ color: '#334155' }}>•</span>
-                                            <span style={{ color: '#06B6D4', fontWeight: 600 }}>{alert.zone}</span>
+                                            <span style={{ color: 'var(--text-disabled)' }}>•</span>
+                                            <span style={{ color: 'var(--cyan-500)', fontWeight: 600 }}>{alert.zone}</span>
                                         </div>
                                     </div>
                                 )
@@ -268,8 +268,7 @@ export default function Dashboard() {
                         display: 'flex',
                         alignItems: 'center',
                         gap: 16,
-                        background: 'rgba(255,255,255,0.7)',
-                        backdropFilter: 'blur(10px)',
+                        background: 'var(--bg-card)',
                         border: '1px solid var(--border-subtle)',
                         borderRadius: 'var(--radius-lg)',
                         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
@@ -325,10 +324,10 @@ export default function Dashboard() {
                                     content={({ active, payload, label }: any) => {
                                         if (active && payload && payload.length) {
                                             return (
-                                                <div className="glass-panel" style={{ padding: 12, border: '1px solid var(--border-strong)', fontSize: 11, background: 'rgba(255,255,255,0.95)' }}>
+                                                <div className="glass-panel" style={{ padding: 12, border: '1px solid var(--border-strong)', fontSize: 11, background: 'var(--bg-surface)', color: 'var(--text-primary)' }}>
                                                     <div style={{ color: 'var(--text-muted)', marginBottom: 4 }}>T + {label} HOURS</div>
-                                                    <div style={{ color: '#8B5CF6', fontWeight: 700, fontSize: 14 }}>PREDICTION: {payload[0].value.toFixed(2)}m</div>
-                                                    <div style={{ color: '#06B6D4', fontWeight: 700 }}>RISK PROB: {payload[0].payload.riskProbability.toFixed(1)}%</div>
+                                                    <div style={{ color: 'var(--purple-400)', fontWeight: 700, fontSize: 14 }}>PREDICTION: {payload[0].value.toFixed(2)}m</div>
+                                                    <div style={{ color: 'var(--cyan-500)', fontWeight: 700 }}>RISK PROB: {payload[0].payload.riskProbability.toFixed(1)}%</div>
                                                 </div>
                                             )
                                         }

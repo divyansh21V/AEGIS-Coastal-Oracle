@@ -4,7 +4,9 @@
 
 An **AI-powered, offline-first coastal flood prediction engine** built for the AMD Slingshot Hackathon. AEIGS uses real-time drone data simulation, computer vision (YOLOv8 on ONNX Runtime/DirectML), and coastal hydrodynamic equations (Stockdon 2006) to predict which streets will be underwater before the water arrives.
 
-**Target City:** MUMBAI, Andhra Pradesh, India — India's Financial Capital.
+**🔗 [Live Demo Link (For Hackathon Judges)](https://aegis-coastal-oracle.vercel.app/)**
+
+**Target City:** Mumbai, Maharashtra, India — India's Financial Capital.
 
 ---
 
@@ -46,11 +48,11 @@ AEIGS provides **probabilistic flood prediction** using:
 | Port Authority | When to close harbor operations |
 | Coastal Residents | Evacuation alerts with shelter locations |
 
-### Visakhapatnam (Vizag) — Why This City?
-- Hit by **Cyclone Hudhud (2014)** — Category 4, 46 deaths, ₹21,908 crore damage
-- 130 km coastline on the Bay of Bengal
-- India's **largest port** by cargo volume
-- Population: 2.1 million, with dense coastal settlements
+### Mumbai — Why This City?
+- Hit by **2005 Mumbai Floods** — 1000+ deaths, massive infrastructural damage
+- Over 100 km of vulnerable coastline on the Arabian Sea
+- India's **largest port** (Nhava Sheva/Mumbai Port) by cargo volume
+- Population: 20+ million, with extremely dense coastal settlements
 
 ---
 
@@ -593,7 +595,7 @@ python scripts/massive_data_pipeline.py
 {
   "type": "telemetry",
   "timestamp": 1708271100.0,
-  "city": { "name": "Visakhapatnam", "state": "Andhra Pradesh, India" },
+  "city": { "name": "Mumbai", "state": "Maharashtra, India" },
   "ocean": { "wave_height_m": 2.5, "wave_period_s": 10.2 },
   "physics": { "runup_m": 1.832, "overall_risk": "HIGH" },
   "key_metrics": {
@@ -603,13 +605,13 @@ python scripts/massive_data_pipeline.py
     "coastal_temp_c": 28.3
   },
   "sectors": {
-    "RK Beach": { "score": 72, "status": "HIGH", "wall_height": 2.5, "lat": 17.7145, "lon": 83.3255 }
+    "Marine Drive": { "score": 72, "status": "HIGH", "wall_height": 2.5, "lat": 18.944, "lon": 72.823 }
   },
   "roads": {
-    "Beach Road": { "depth_cm": 12.3, "status": "WET", "color": "yellow", "passable": "Trucks OK" }
+    "Marine Drive": { "depth_cm": 12.3, "status": "WET", "color": "yellow", "passable": "Trucks OK" }
   },
   "forecast": [{ "label": "+0m", "runup_m": 1.832 }, { "label": "+10m", "runup_m": 1.95 }],
-  "shelters": [{ "name": "GVMC Community Hall", "lat": 17.712, "lon": 83.318, "capacity": 500 }],
+  "shelters": [{ "name": "BMC Community Hall", "lat": 18.940, "lon": 72.820, "capacity": 500 }],
   "system": { "inference_device": "AMD Ryzen AI (NPU)", "onnx_providers": ["DmlExecutionProvider"] }
 }
 ```
@@ -702,7 +704,7 @@ session = ort.InferenceSession("model.onnx", providers=['DmlExecutionProvider'])
 3. **INCOIS** — Indian National Centre for Ocean Information Services. Wave forecast data.
 4. **ONNX Runtime** — Microsoft. Cross-platform ML inference engine.
 5. **DirectML** — Microsoft. Hardware-accelerated ML on AMD GPUs/NPUs.
-6. **Cyclone Hudhud (2014)** — IMD Report. Impact assessment for Visakhapatnam.
+6. **Mumbai Floods (2005)** — IMD Report. Impact assessment for Mumbai.
 
 ---
 
@@ -711,7 +713,7 @@ session = ort.InferenceSession("model.onnx", providers=['DmlExecutionProvider'])
 
 ## 📈 Model Evaluation (Deep Dive)
 
-*The following analysis was conducted on the validation dataset `vizag_historical_storms.csv` (n=250 events). This section mirrors a data science notebook workflow, comparing the Physics-based approach against ML baselines.*
+*The following analysis was conducted on the validation dataset `mumbai_historical_storms.csv` (n=250 events). This section mirrors a data science notebook workflow, comparing the Physics-based approach against ML baselines.*
 
 ### 1. Exploratory Data Analysis (EDA)
 Understanding the distribution of wave parameters before modeling.
@@ -721,7 +723,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-df = pd.read_csv('vizag_validation_set.csv')
+df = pd.read_csv('mumbai_validation_set.csv')
 
 # 1.1 Distribution of Significant Wave Height (Hs)
 plt.figure(figsize=(10, 6))
@@ -1044,7 +1046,7 @@ from sklearn.model_selection import KFold
 from sklearn.metrics import mean_squared_error
 import numpy as np
 
-# 5-Fold CV on Vizag validation set (n=250)
+# 5-Fold CV on Mumbai validation set (n=250)
 X = df[['wave_height_m', 'period_s', 'beach_slope']].values
 y = df['actual_runup_m'].values
 
