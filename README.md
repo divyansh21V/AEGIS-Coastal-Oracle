@@ -48,12 +48,6 @@ AEIGS provides **probabilistic flood prediction** using:
 | Port Authority | When to close harbor operations |
 | Coastal Residents | Evacuation alerts with shelter locations |
 
-### Mumbai — Why This City?
-- Hit by **2005 Mumbai Floods** — 1000+ deaths, massive infrastructural damage
-- Over 100 km of vulnerable coastline on the Arabian Sea
-- India's **largest port** (Nhava Sheva/Mumbai Port) by cargo volume
-- Population: 20+ million, with extremely dense coastal settlements
-
 ---
 
 ## 📊 Dataset
@@ -1190,16 +1184,7 @@ for minute in range(0, 240, 10):
 | **Shelter Map** | `shelters[].lat/lon + capacity` | Green pin markers with capacity/occupancy popover |
 
 ---
-
-## 📄 License
-
-MIT License. Built for the **AMD Slingshot Hackathon**.
-
----
-
 <p align="center">
-
-
 
   🔱 <strong>AEGIS</strong> — Giving governments the one thing they can't buy: <em>Time.</em>
 </p>
